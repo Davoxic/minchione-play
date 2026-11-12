@@ -141,7 +141,8 @@ public struct LyricsShareCardView: View {
                 let chosen = lyricsService.currentLyrics.filter { selectedLineIds.contains($0.id) }
                 if chosen.isEmpty {
                     Text("Seleziona almeno una riga del testo per creare la card...")
-                        .font(.system(size: 14, style: .italic))
+                        .font(.system(size: 14))
+                        .italic()
                         .foregroundColor(AppTheme.textMuted)
                 } else {
                     ForEach(chosen) { line in

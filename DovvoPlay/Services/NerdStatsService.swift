@@ -64,7 +64,7 @@ public class NerdStatsService {
         }
 
         // 4. Equalizer preset
-        let eqPreset = EqualizerService.shared.activePreset.name
+        let eqPreset = EqualizerService.shared.currentPreset.name
 
         // 5. Pipeline
         let pipeline = "AVURLAsset → AVPlayerItem → AVAudioSession (\(routeName)) → AVAudioUnitEQ (5-Bande) → Uscita Hardware"

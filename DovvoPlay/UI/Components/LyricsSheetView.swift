@@ -181,8 +181,9 @@ public struct LyricsSheetView: View {
 
     // MARK: - No Lyrics Fallback
     private var noLyricsView: some View {
-        Spacer()
         VStack(spacing: 12) {
+            Spacer()
+
             Image(systemName: "quote.bubble")
                 .font(.system(size: 44))
                 .foregroundColor(AppTheme.textMuted)
@@ -213,8 +214,9 @@ public struct LyricsSheetView: View {
                 }
                 .padding(.top, 8)
             }
+
+            Spacer()
         }
-        Spacer()
     }
 
     // MARK: - Offset Adjustment Bar
