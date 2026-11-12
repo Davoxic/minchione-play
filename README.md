@@ -1,12 +1,41 @@
-# DovvoPlay (Native Swift & SwiftUI Edition)
+# MinchionePlay (DovvoPlay + BitChord Edition)
 
-Player musicale premium nativo per iPhone scritto al **100% in Swift e SwiftUI**, con equalizzatore audio hardware a 5 bande, tracciamento avanzato delle abitudini d'ascolto (secondo per secondo), server Wi-Fi HTTP integrato, sincronizzazione LAN con PC Companion, integrazione YouTube Music AAC, convertitore Spotify/SoundCloud e 12+ temi visivi OLED.
+Player musicale premium nativo per iPhone scritto al **100% in Swift e SwiftUI**, che unisce l'architettura di **DovvoPlay** e le migliori funzionalità di **BitChord**: testi sincronizzati in tempo reale con LRCLIB, sleep timer a spegnimento graduale, statistiche per esperti (Stats for Nerds), equalizzatore hardware a 5 bande, tracciamento avanzato delle abitudini d'ascolto, server Wi-Fi HTTP, sincronizzazione LAN con PC Companion, YouTube Music Explore & Moods con streaming audio AAC diretto, convertitori Spotify/SoundCloud, dissolvenza incrociata (crossfade), controlli di velocità e 12+ temi visivi OLED.
 
 Zero dipendenze esterne: basato esclusivamente su framework Apple moderni (`SwiftUI`, `AVFoundation`, `MediaPlayer`, `Network`, `Combine`, `UniformTypeIdentifiers`).
 
 ---
 
-## 🌟 Caratteristiche Principali
+## 🌟 Funzionalità BitChord Integrate in MinchionePlay
+
+- **Testi Sincronizzati in Tempo Reale (LRCLIB & Karaoke Apple-Style)**:
+  - Recupero automatico testi sincronizzati da database pubblico `LRCLIB` (`[mm:ss.xx]`).
+  - Scorrimento automatico riga per riga con testo ingrandito e glow dorato sul verso attivo.
+  - Tocco interattivo sul verso per saltare direttamente a quel secondo del brano.
+  - Regolazione manuale dell'offset temporale (+/- 0.5s) e fallback a testo statico.
+  - Creazione e condivisione di card grafiche con citazioni del testo e artwork.
+- **Timer di Sospensione / Sleep Timer**:
+  - Presets configurabili: 15m, 30m, 45m, 60m o "Al termine del brano corrente".
+  - Monitoraggio su clock continuo con conto alla rovescia in tempo reale.
+  - Dissolvenza graduale del volume audio prima della pausa.
+- **Statistiche Tecniche per Esperti (Stats for Nerds)**:
+  - Telemetria live: Codec (AAC, ALAC, FLAC, MP3, WAV), Bitrate, Sample Rate (44.1 / 48 / 96 kHz), Canali, Uscita audio attiva (AirPods Pro, Speaker, Bluetooth A2DP, AirPlay), Stato buffer e Pipeline audio hardware.
+- **Controlli di Riproduzione Avanzati & DSP**:
+  - Velocità di riproduzione regolabile (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x).
+  - Dissolvenza incrociata tra brani (Crossfade da 0 a 12 secondi).
+  - Salto automatico del silenzio (Skip Silence).
+  - Selezione qualità di streaming su Wi-Fi e rete dati (Lossless FLAC, 256k AAC, 128k, Data Saver).
+- **Esplorazione & Mood Musicali YouTube (BitChord Discovery Hub)**:
+  - Navigazione immediata per atmosfere: Chill & Relax, Allenamento, Focus & Studio, Party & Dance, Top Hits 2026, Trap & Hip-Hop, Rock Classics, Notte.
+  - Classifiche Top Hits Italia in tempo reale con 1 tap.
+  - Generazione automatica di brani correlati ("Up Next" / Radio) per ascolto continuo senza interruzioni.
+- **Integrazioni Social**:
+  - Presenza su Discord tramite Webhook / RPC Bridge.
+  - Scrobbler per Last.fm.
+
+---
+
+## 🌟 Caratteristiche DovvoPlay Ereditate
 
 - **Riproduzione Audio Nativa in Background** (`AVFoundation`, `AVAudioSession`, `MPNowPlayingInfoCenter`, `MPRemoteCommandCenter`):
   - Supporto formati audio lossless e compressi (.mp3, .m4a, .aac, .flac, .wav).

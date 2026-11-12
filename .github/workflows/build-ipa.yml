@@ -64,18 +64,19 @@ jobs:
             exit 1
           fi
           echo "Trovata app in: $APP_PATH"
-          rm -rf Payload DovvoPlay-unsigned.ipa
+          rm -rf Payload DovvoPlay-unsigned.ipa MinchionePlay-unsigned.ipa
           mkdir -p Payload
-          cp -R "$APP_PATH" Payload/DovvoPlay.app
-          rm -rf "Payload/DovvoPlay.app/_CodeSignature" "Payload/DovvoPlay.app/embedded.mobileprovision"
-          zip -qry DovvoPlay-unsigned.ipa Payload
-          ls -lh DovvoPlay-unsigned.ipa
+          cp -R "$APP_PATH" Payload/MinchionePlay.app
+          rm -rf "Payload/MinchionePlay.app/_CodeSignature" "Payload/MinchionePlay.app/embedded.mobileprovision"
+          zip -qry MinchionePlay-unsigned.ipa Payload
+          cp MinchionePlay-unsigned.ipa DovvoPlay-unsigned.ipa
+          ls -lh MinchionePlay-unsigned.ipa DovvoPlay-unsigned.ipa
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DovvoPlay-unsigned-ipa
-          path: DovvoPlay-unsigned.ipa
+          name: MinchionePlay-unsigned-ipa
+          path: MinchionePlay-unsigned.ipa
           if-no-files-found: error
           retention-days: 90
 
@@ -103,9 +104,9 @@ jobs:
           fi
           echo "Tag della release: $RELEASE_TAG"
 
-          gh release create "$RELEASE_TAG" DovvoPlay-unsigned.ipa \
-            --title "DovvoPlay ${RELEASE_TAG}" \
-            --notes "Build unsigned nativa Swift & SwiftUI generata da GitHub Actions. Firmala in locale con la tua app di firma preferita (ESign, Scarlet, Feather, Sideloadly, TrollStore)." \
-            || gh release upload "$RELEASE_TAG" DovvoPlay-unsigned.ipa --clobber
+          gh release create "$RELEASE_TAG" MinchionePlay-unsigned.ipa DovvoPlay-unsigned.ipa \
+            --title "MinchionePlay ${RELEASE_TAG}" \
+            --notes "Build unsigned nativa Swift & SwiftUI con integrazione BitChord completa (Testi LRCLIB, Sleep Timer, Stats for Nerds, Crossfade, Moods YouTube) generata da GitHub Actions. Firmala con TrollStore, ESign, Feather, Scarlet, Sideloadly o AltStore." \
+            || gh release upload "$RELEASE_TAG" MinchionePlay-unsigned.ipa DovvoPlay-unsigned.ipa --clobber
 
           gh release edit "$RELEASE_TAG" --latest || true

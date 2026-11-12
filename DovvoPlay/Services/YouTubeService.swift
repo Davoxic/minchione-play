@@ -107,6 +107,75 @@ public class YouTubeService: ObservableObject {
         return results
     }
 
+    // --- EXPLORE, TRENDING & RELATED TRACKS (BitChord Engine) ---
+
+    public func fetchTrending() async throws -> [YouTubeTrack] {
+        return try await search(query: "Top Hits Italia 2026")
+    }
+
+    public func fetchMoodTracks(mood: String) async throws -> [YouTubeTrack] {
+        return try await search(query: mood)
+    }
+
+    public func fetchRelatedTracks(videoId: String) async throws -> [YouTubeTrack] {
+        let endpoint = URL(string: "https://www.youtube.com/youtubei/v1/next")!
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15", forHTTPHeaderField: "User-Agent")
+
+        let payload: [String: Any] = [
+            "context": [
+                "client": [
+                    "clientName": "WEB",
+                    "clientVersion": "2.20240101.00.00",
+                    "hl": "it",
+                    "gl": "IT"
+                ]
+            ],
+            "videoId": videoId
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: payload)
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard (response as? HTTPURLResponse)?.statusCode == 200,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                return []
+            }
+
+            var results: [YouTubeTrack] = []
+            if let contents = json["contents"] as? [String: Any],
+               let twoColumn = contents["twoColumnWatchNextResults"] as? [String: Any],
+               let secondary = twoColumn["secondaryResults"] as? [String: Any],
+               let secondaryContents = secondary["secondaryResults"] as? [String: Any],
+               let items = secondaryContents["results"] as? [[String: Any]] {
+                for item in items {
+                    guard let compact = item["compactVideoRenderer"] as? [String: Any],
+                          let vId = compact["videoId"] as? String else { continue }
+                    let titleRuns = (compact["title"] as? [String: Any])?["runs"] as? [[String: Any]]
+                    let titleStr = titleRuns?.compactMap { $0["text"] as? String }.joined() ?? "Brano Consigliato"
+                    let authorRuns = ((compact["longBylineText"] ?? compact["shortBylineText"]) as? [String: Any])?["runs"] as? [[String: Any]]
+                    let author = authorRuns?.compactMap { $0["text"] as? String }.joined() ?? "YouTube Music"
+                    let lenStr = (compact["lengthText"] as? [String: Any])?["simpleText"] as? String ?? ""
+                    let duration = parseDurationString(lenStr)
+                    let thumb = "https://i.ytimg.com/vi/\(vId)/hqdefault.jpg"
+                    results.append(YouTubeTrack(
+                        id: vId,
+                        title: titleStr,
+                        author: author,
+                        duration: duration,
+                        thumbnailUrl: thumb,
+                        url: "https://www.youtube.com/watch?v=\(vId)"
+                    ))
+                }
+            }
+            return results
+        } catch {
+            return []
+        }
+    }
+
     private func fallbackSearch(query: String) async throws -> [YouTubeTrack] {
         guard let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "https://www.youtube.com/results?search_query=\(encoded)") else {

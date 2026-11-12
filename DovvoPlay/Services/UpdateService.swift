@@ -7,7 +7,7 @@ public class UpdateService: ObservableObject {
 
     public static let currentVersion = "2.0.0"
     public static let repoOwner = "Davoxic"
-    public static let repoName = "sonora"
+    public static let repoName = "minchione-play"
 
     @Published public private(set) var isChecking: Bool = false
     @Published public private(set) var isDownloading: Bool = false

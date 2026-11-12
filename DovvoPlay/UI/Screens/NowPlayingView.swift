@@ -12,6 +12,9 @@ public struct NowPlayingView: View {
     @State private var showingQueue: Bool = false
     @State private var showingAnimationPicker: Bool = false
     @State private var showingShufflePicker: Bool = false
+    @State private var showingLyrics: Bool = false
+    @State private var showingSleepTimer: Bool = false
+    @State private var showingNerdStats: Bool = false
 
     public init() {}
 
@@ -25,39 +28,67 @@ public struct NowPlayingView: View {
 
             VStack(spacing: 0) {
                 // Top Header Bar
-                HStack {
+                HStack(spacing: 8) {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 20, weight: .bold))
                             .foregroundColor(AppTheme.textPrimary)
-                            .frame(width: 44, height: 44)
+                            .frame(width: 40, height: 40)
                     }
 
                     Spacer()
 
-                    // Source Badge
+                    // Source Badge & Stats for Nerds button
                     if let track = player.currentTrack {
-                        Text(track.isOnline ? "YOUTUBE MUSIC" : "LOCAL AUDIO")
-                            .font(.system(size: 10, weight: .black))
-                            .tracking(1.5)
+                        Button(action: {
+                            showingNerdStats = true
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "info.circle")
+                                    .font(.system(size: 10, weight: .bold))
+                                Text(track.isOnline ? "YOUTUBE MUSIC" : "LOCAL AUDIO")
+                                    .font(.system(size: 10, weight: .black))
+                                    .tracking(1.2)
+                            }
                             .foregroundColor(AppTheme.primary)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                             .background(AppTheme.primary.opacity(0.15))
                             .cornerRadius(12)
+                        }
                     }
 
                     Spacer()
 
+                    // Sleep Timer Quick Button
+                    Button(action: {
+                        showingSleepTimer = true
+                    }) {
+                        ZStack(alignment: .topTrailing) {
+                            Image(systemName: SleepTimerService.shared.isRunning ? "moon.zzz.fill" : "moon.fill")
+                                .font(.system(size: 17, weight: .bold))
+                                .foregroundColor(SleepTimerService.shared.isRunning ? AppTheme.primary : AppTheme.textMuted)
+                                .frame(width: 38, height: 38)
+
+                            if SleepTimerService.shared.isRunning {
+                                Circle()
+                                    .fill(AppTheme.primary)
+                                    .frame(width: 7, height: 7)
+                                    .offset(x: -2, y: 4)
+                            }
+                        }
+                    }
+
+                    // Equalizer Button
                     Button(action: {
                         showingEqualizer = true
                     }) {
                         Image(systemName: "slider.vertical.3")
-                            .font(.system(size: 18, weight: .bold))
+                            .font(.system(size: 17, weight: .bold))
                             .foregroundColor(AppTheme.primary)
-                            .frame(width: 44, height: 44)
+                            .frame(width: 38, height: 38)
                     }
                 }
                 .padding(.horizontal, 16)
@@ -238,40 +269,82 @@ public struct NowPlayingView: View {
 
                 Spacer(minLength: 12)
 
-                // Bottom Utilities Bar
-                HStack(spacing: 32) {
+                // Bottom Utilities Bar (Lyrics, Speed, Anim, Queue)
+                HStack(spacing: 12) {
+                    // 1. Playback Speed Button
+                    Button(action: {
+                        player.cyclePlaybackSpeed()
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "gauge.with.needle")
+                                .font(.system(size: 11))
+                            Text(String(format: "%.2fx", player.playbackSpeed))
+                                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        }
+                        .foregroundColor(player.playbackSpeed != 1.0 ? AppTheme.primary : AppTheme.textSecondary)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 8)
+                        .background(player.playbackSpeed != 1.0 ? AppTheme.primary.opacity(0.12) : AppTheme.surfaceCard)
+                        .cornerRadius(12)
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.goldBorder, lineWidth: 1))
+                    }
+
+                    // 2. Synced Lyrics Button (BitChord / Apple Music)
+                    Button(action: {
+                        showingLyrics = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "quote.bubble.fill")
+                                .font(.system(size: 11))
+                            Text("Testi")
+                                .font(.system(size: 11, weight: .bold))
+                        }
+                        .foregroundColor(LyricsService.shared.hasAnyLyrics ? AppTheme.primary : AppTheme.textSecondary)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 8)
+                        .background(LyricsService.shared.hasAnyLyrics ? AppTheme.primary.opacity(0.12) : AppTheme.surfaceCard)
+                        .cornerRadius(12)
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.goldBorder, lineWidth: 1))
+                    }
+
+                    // 3. Animation Themes Button
                     Button(action: {
                         showingAnimationPicker = true
                     }) {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 4) {
                             Image(systemName: AnimationThemeService.shared.currentTheme.systemImage)
+                                .font(.system(size: 11))
                             Text(AnimationThemeService.shared.currentTheme.name)
                                 .font(.system(size: 11, weight: .bold))
+                                .lineLimit(1)
                         }
                         .foregroundColor(AppTheme.textSecondary)
-                        .padding(.horizontal, 12)
+                        .padding(.horizontal, 10)
                         .padding(.vertical, 8)
                         .background(AppTheme.surfaceCard)
                         .cornerRadius(12)
                         .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.goldBorder, lineWidth: 1))
                     }
 
+                    // 4. Playback Queue Button
                     Button(action: {
                         showingQueue = true
                     }) {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 4) {
                             Image(systemName: "list.bullet")
+                                .font(.system(size: 11))
                             Text("Coda (\(player.queue.count))")
                                 .font(.system(size: 11, weight: .bold))
                         }
                         .foregroundColor(AppTheme.primary)
-                        .padding(.horizontal, 12)
+                        .padding(.horizontal, 10)
                         .padding(.vertical, 8)
                         .background(AppTheme.primary.opacity(0.12))
                         .cornerRadius(12)
                         .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.goldBorder, lineWidth: 1))
                     }
                 }
+                .padding(.horizontal, 16)
                 .padding(.bottom, 24)
             }
         }
@@ -286,6 +359,15 @@ public struct NowPlayingView: View {
         }
         .sheet(isPresented: $showingShufflePicker) {
             ShuffleModePickerSheetView()
+        }
+        .sheet(isPresented: $showingLyrics) {
+            LyricsSheetView()
+        }
+        .sheet(isPresented: $showingSleepTimer) {
+            SleepTimerSheetView()
+        }
+        .sheet(isPresented: $showingNerdStats) {
+            NerdStatsSheetView()
         }
     }
 

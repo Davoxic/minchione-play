@@ -80,6 +80,11 @@ public class AudioPlayerService: NSObject, ObservableObject {
     @Published public private(set) var shuffleMode: ShuffleMode = .off
     @Published public private(set) var lastErrorMessage: String?
 
+    // BitChord Playback Features
+    @Published public var playbackSpeed: Float = 1.0
+    @Published public var crossfadeSeconds: Double = 0.0
+    @Published public var skipSilence: Bool = false
+
     public var isShuffle: Bool { shuffleMode != .off }
     public var hasNext: Bool { currentIndex >= 0 && currentIndex < queue.count - 1 }
     public var hasPrevious: Bool { currentIndex > 0 }
@@ -182,6 +187,7 @@ public class AudioPlayerService: NSObject, ObservableObject {
             if !sec.isNaN && !sec.isInfinite {
                 self.position = sec
                 self.updateNowPlayingInfoPosition()
+                LyricsService.shared.updateActiveLine(currentPlaybackTime: sec)
             }
         }
     }
@@ -236,6 +242,8 @@ public class AudioPlayerService: NSObject, ObservableObject {
 
         StatsService.shared.recordTrackStart(track: track)
         updateNowPlayingInfo(track: track)
+        LyricsService.shared.fetchLyrics(for: track)
+        IntegrationsService.shared.notifyTrackChange(track: track)
 
         Task { @MainActor in
             do {
@@ -303,8 +311,26 @@ public class AudioPlayerService: NSObject, ObservableObject {
 
     public func play() {
         player.play()
+        player.rate = playbackSpeed
         isPlaying = true
         updateNowPlayingInfoPosition()
+    }
+
+    public func setPlaybackSpeed(_ speed: Float) {
+        playbackSpeed = speed
+        if isPlaying {
+            player.rate = speed
+        }
+    }
+
+    public func cyclePlaybackSpeed() {
+        let speeds: [Float] = [1.0, 1.25, 1.5, 2.0, 0.75]
+        if let idx = speeds.firstIndex(of: playbackSpeed) {
+            let nextIdx = (idx + 1) % speeds.count
+            setPlaybackSpeed(speeds[nextIdx])
+        } else {
+            setPlaybackSpeed(1.0)
+        }
     }
 
     public func pause() {
@@ -378,6 +404,11 @@ public class AudioPlayerService: NSObject, ObservableObject {
     @objc private func playerItemDidReachEnd() {
         recordCurrentTrackStats()
 
+        // 1. BitChord Sleep Timer Check: Stop if "end of track" was requested
+        if SleepTimerService.shared.consumeAfterTrack() {
+            return
+        }
+
         if loopMode == .one {
             seek(to: 0)
             play()
@@ -387,7 +418,21 @@ public class AudioPlayerService: NSObject, ObservableObject {
             currentIndex = 0
             playTrack(queue[0])
         } else {
-            pause()
+            // BitChord Up Next / Autoplay fallback: if current track is from YouTube, fetch related
+            if let track = currentTrack, track.isOnline {
+                let videoId = track.id.replacingOccurrences(of: "yt_", with: "")
+                Task { @MainActor in
+                    if let related = try? await YouTubeService.shared.fetchRelatedTracks(videoId: videoId),
+                       let first = related.first {
+                        let newTrack = first.toTrack()
+                        self.play(track: newTrack)
+                        return
+                    }
+                    self.pause()
+                }
+            } else {
+                pause()
+            }
         }
     }
 

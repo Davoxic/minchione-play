@@ -77,21 +77,7 @@ public struct YouTubeTabView: View {
                     }
                     Spacer()
                 } else if results.isEmpty {
-                    Spacer()
-                    VStack(spacing: 10) {
-                        Image(systemName: "play.rectangle.fill")
-                            .font(.system(size: 48))
-                            .foregroundColor(AppTheme.primary.opacity(0.4))
-                        Text("Cerca milioni di tracce su YouTube")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(AppTheme.textPrimary)
-                        Text("Streaming audio istantaneo senza video o scarica offline nella libreria.")
-                            .font(.system(size: 12))
-                            .foregroundColor(AppTheme.textMuted)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 40)
-                    }
-                    Spacer()
+                    exploreAndMoodsView
                 } else {
                     resultsList
                 }
@@ -349,6 +335,106 @@ public struct YouTubeTabView: View {
         .background(AppTheme.surfaceCard)
         .cornerRadius(14)
         .overlay(RoundedRectangle(cornerRadius: 14).stroke(AppTheme.goldBorder.opacity(0.6), lineWidth: 1))
+    }
+
+    // MARK: - Explore & Moods Hub (BitChord Feature)
+    private var exploreAndMoodsView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                // Header
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("ESPLORA & MOOD MUSICALI")
+                            .font(.system(size: 11, weight: .black))
+                            .tracking(1.2)
+                            .foregroundColor(AppTheme.primary)
+                        Text("Classifiche & Atmosfere BitChord")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(AppTheme.textPrimary)
+                    }
+                    Spacer()
+
+                    Button(action: {
+                        searchInput = "Top Hits Italia 2026"
+                        performSearch("Top Hits Italia 2026")
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "flame.fill")
+                            Text("Top Charts")
+                        }
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.black)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(AppTheme.primary))
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+
+                // Moods Grid
+                let moods: [(emoji: String, name: String, query: String, color: Color)] = [
+                    ("🏖️", "Chill & Relax", "Lo-Fi Chill Beats", .teal),
+                    ("⚡", "Allenamento", "Workout Fitness Gym", .orange),
+                    ("🧠", "Focus & Studio", "Deep Focus Instrumental", .purple),
+                    ("🎉", "Party & Dance", "Dance Electronic Party Hits", .pink),
+                    ("📻", "Top Hits 2026", "Top Hits Italia 2026", .yellow),
+                    ("💎", "Trap & Hip-Hop", "Rap Trap Italiano", .red),
+                    ("🎸", "Rock Classics", "Rock Classico Anni 80 90", .blue),
+                    ("🌙", "Notte & Sonno", "Sleep Ambient Meditation", .indigo)
+                ]
+
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                    ForEach(moods, id: \.name) { mood in
+                        Button(action: {
+                            searchInput = mood.query
+                            performSearch(mood.query)
+                        }) {
+                            HStack(spacing: 12) {
+                                Text(mood.emoji)
+                                    .font(.system(size: 26))
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(mood.name)
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundColor(AppTheme.textPrimary)
+                                    Text("Scopri brani")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(AppTheme.textMuted)
+                                }
+                                Spacer()
+                            }
+                            .padding(14)
+                            .background(AppTheme.surfaceCard)
+                            .cornerRadius(14)
+                            .overlay(RoundedRectangle(cornerRadius: 14).stroke(AppTheme.goldBorder.opacity(0.8), lineWidth: 1))
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+
+                // Hint card
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "sparkles")
+                            .foregroundColor(AppTheme.primary)
+                        Text("Streaming AAC & Testi Sincronizzati")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(AppTheme.primary)
+                    }
+                    Text("Qualsiasi brano avviato da YouTube carica automaticamente i testi sincronizzati in tempo reale da LRCLIB.")
+                        .font(.system(size: 11))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .padding(14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(AppTheme.primary.opacity(0.08))
+                .cornerRadius(14)
+                .overlay(RoundedRectangle(cornerRadius: 14).stroke(AppTheme.goldBorder.opacity(0.5), lineWidth: 1))
+                .padding(.horizontal, 16)
+                .padding(.bottom, 24)
+            }
+        }
     }
 
     private func performSearch(_ query: String) {

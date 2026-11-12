@@ -15,6 +15,9 @@ public struct SettingsTab: View {
     @State private var showingImportTextAlert: Bool = false
     @State private var importJsonInput: String = ""
     @State private var showingFileImporter: Bool = false
+    @State private var showingSleepTimer: Bool = false
+    @State private var showingLyricsSheet: Bool = false
+    @State private var showingNerdStats: Bool = false
     @State private var toastMessage: String? = nil
 
     public init() {}
@@ -79,6 +82,61 @@ public struct SettingsTab: View {
                                     badge: "AUDIO EQ",
                                     badgeColor: AppTheme.primary,
                                     icon: "slider.vertical.3",
+                                    gradient: AppTheme.primaryGradient
+                                )
+                            }
+                        }
+
+                        // Section: BitChord Integrated Features
+                        VStack(alignment: .leading, spacing: 10) {
+                            sectionHeader("BITCHORD FEATURES INTEGRATE")
+
+                            Button(action: {
+                                showingSleepTimer = true
+                            }) {
+                                featureTile(
+                                    title: "Timer di Sospensione",
+                                    subtitle: SleepTimerService.shared.isRunning ? "Attivo: \(SleepTimerService.shared.countdownString) rimanenti" : "15m, 30m, 45m, 60m o fine brano corrente",
+                                    badge: SleepTimerService.shared.isRunning ? "ATTIVO" : "TIMER",
+                                    badgeColor: Color.purple,
+                                    icon: "moon.zzz.fill",
+                                    gradient: LinearGradient(colors: [.purple, .indigo], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
+                            }
+
+                            Button(action: {
+                                showingLyricsSheet = true
+                            }) {
+                                featureTile(
+                                    title: "Testi Sincronizzati (LRCLIB)",
+                                    subtitle: "Karaoke Apple-style, scorrimento riga per riga e condivisione card",
+                                    badge: "KARAOKE",
+                                    badgeColor: Color.pink,
+                                    icon: "quote.bubble.fill",
+                                    gradient: LinearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
+                            }
+
+                            Button(action: {
+                                showingNerdStats = true
+                            }) {
+                                featureTile(
+                                    title: "Statistiche Tecniche (Stats for Nerds)",
+                                    subtitle: "Codec AAC/FLAC, bitrate, frequenza, buffer e percorso audio hardware",
+                                    badge: "TELEMETRY",
+                                    badgeColor: Color.cyan,
+                                    icon: "waveform.badge.magnifyingglass",
+                                    gradient: LinearGradient(colors: [.cyan, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
+                            }
+
+                            NavigationLink(destination: BitChordSettingsView()) {
+                                featureTile(
+                                    title: "Opzioni BitChord, DSP & Social",
+                                    subtitle: "Qualità lossless, crossfade brani, scrobbler Last.fm e presenza Discord",
+                                    badge: "BITCHORD",
+                                    badgeColor: AppTheme.primary,
+                                    icon: "bolt.horizontal.circle.fill",
                                     gradient: AppTheme.primaryGradient
                                 )
                             }
@@ -181,10 +239,10 @@ public struct SettingsTab: View {
 
                         // App Info
                         VStack(spacing: 4) {
-                            Text("DovvoPlay iOS Native Edition v2.0.0")
+                            Text("MinchionePlay iOS Native Edition v2.0.0")
                                 .font(.system(size: 13, weight: .bold))
                                 .foregroundColor(AppTheme.textSecondary)
-                            Text("100% Swift & AVFoundation • Nessun tracciamento dei tuoi dati")
+                            Text("DovvoPlay + BitChord Integration • 100% Swift & AVFoundation")
                                 .font(.system(size: 11))
                                 .foregroundColor(AppTheme.textMuted)
                         }
@@ -230,6 +288,15 @@ public struct SettingsTab: View {
             .sheet(isPresented: $showingViewModePicker) {
                 ViewModePickerSheet()
             }
+            .sheet(isPresented: $showingSleepTimer) {
+                SleepTimerSheetView()
+            }
+            .sheet(isPresented: $showingLyricsSheet) {
+                LyricsSheetView()
+            }
+            .sheet(isPresented: $showingNerdStats) {
+                NerdStatsSheetView()
+            }
             .fileImporter(
                 isPresented: $showingFileImporter,
                 allowedContentTypes: [.json],
@@ -269,7 +336,7 @@ public struct SettingsTab: View {
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("DOVVOPLAY GOLD")
+                    Text("MINCHIONEPLAY GOLD")
                         .font(.system(size: 11, weight: .black))
                         .tracking(1.5)
                         .foregroundColor(AppTheme.secondary)
