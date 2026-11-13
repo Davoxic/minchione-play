@@ -18,6 +18,7 @@
 		4BB8A5D26B5C76A6BF756DA6 /* AnimationThemeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23C9B757AA1446B87859397 /* AnimationThemeService.swift */; };
 		F9E0208D19E6DD1249BA6DA8 /* AudioPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864C446DED0810CE6BE9C456 /* AudioPlayerService.swift */; };
 		BB03A57349AB19179546DAB0 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CEC5912A9801FA6D95A8A0 /* BackupService.swift */; };
+		B41525AD90DB3DA827AD462A /* BitChordStreamService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916296C59791DBA92E9ECF6 /* BitChordStreamService.swift */; };
 		A8FFABFEFD608DD4454366BC /* DownloadQueueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF5A23369121F57B9C78DB /* DownloadQueueService.swift */; };
 		DAFAAAF9A50E2636025BEB67 /* EqualizerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA803CB4024B91B32DAC1F5 /* EqualizerService.swift */; };
 		9788AFA42DD1A6CD68562D4E /* IntegrationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827AF368209AE8AD2701CADD /* IntegrationsService.swift */; };
@@ -51,6 +52,7 @@
 		55DE2C212A8915FEADA359BA /* PcCompanionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABD1BECD41FC655D4518813B /* PcCompanionView.swift */; };
 		1EB6D1DA097008D365C60BDA /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA837A0BD33C512F765096 /* PlaylistDetailView.swift */; };
 		FDEF3702450B7FDBFED7EBB3 /* PlaylistTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5490982639F3EE2B59FFEF60 /* PlaylistTab.swift */; };
+		E671C3451B936236DD971DF5 /* SearchStreamTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F056CDDD52D249D4A89C24A7 /* SearchStreamTab.swift */; };
 		CB6DDD5FEBA9C60FC6023994 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FD098FF3658292A2D3E3D1 /* SettingsTab.swift */; };
 		FCBC297C70F40A9A23085537 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A868CD5A2937C95EC9FE5C2 /* StatsView.swift */; };
 		A4788A4188959833B7394423 /* WifiServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB82C28A1880D67144578398 /* WifiServerView.swift */; };
@@ -72,6 +74,7 @@
 		C23C9B757AA1446B87859397 /* AnimationThemeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationThemeService.swift"; sourceTree = "<group>"; };
 		864C446DED0810CE6BE9C456 /* AudioPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioPlayerService.swift"; sourceTree = "<group>"; };
 		C8CEC5912A9801FA6D95A8A0 /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackupService.swift"; sourceTree = "<group>"; };
+		2916296C59791DBA92E9ECF6 /* BitChordStreamService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BitChordStreamService.swift"; sourceTree = "<group>"; };
 		FDAF5A23369121F57B9C78DB /* DownloadQueueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadQueueService.swift"; sourceTree = "<group>"; };
 		AFA803CB4024B91B32DAC1F5 /* EqualizerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EqualizerService.swift"; sourceTree = "<group>"; };
 		827AF368209AE8AD2701CADD /* IntegrationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntegrationsService.swift"; sourceTree = "<group>"; };
@@ -105,6 +108,7 @@
 		ABD1BECD41FC655D4518813B /* PcCompanionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PcCompanionView.swift"; sourceTree = "<group>"; };
 		A7FA837A0BD33C512F765096 /* PlaylistDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaylistDetailView.swift"; sourceTree = "<group>"; };
 		5490982639F3EE2B59FFEF60 /* PlaylistTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaylistTab.swift"; sourceTree = "<group>"; };
+		F056CDDD52D249D4A89C24A7 /* SearchStreamTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchStreamTab.swift"; sourceTree = "<group>"; };
 		63FD098FF3658292A2D3E3D1 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsTab.swift"; sourceTree = "<group>"; };
 		4A868CD5A2937C95EC9FE5C2 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatsView.swift"; sourceTree = "<group>"; };
 		FB82C28A1880D67144578398 /* WifiServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WifiServerView.swift"; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 				C23C9B757AA1446B87859397 /* AnimationThemeService.swift */,
 				864C446DED0810CE6BE9C456 /* AudioPlayerService.swift */,
 				C8CEC5912A9801FA6D95A8A0 /* BackupService.swift */,
+				2916296C59791DBA92E9ECF6 /* BitChordStreamService.swift */,
 				FDAF5A23369121F57B9C78DB /* DownloadQueueService.swift */,
 				AFA803CB4024B91B32DAC1F5 /* EqualizerService.swift */,
 				827AF368209AE8AD2701CADD /* IntegrationsService.swift */,
@@ -235,6 +240,7 @@
 				ABD1BECD41FC655D4518813B /* PcCompanionView.swift */,
 				A7FA837A0BD33C512F765096 /* PlaylistDetailView.swift */,
 				5490982639F3EE2B59FFEF60 /* PlaylistTab.swift */,
+				F056CDDD52D249D4A89C24A7 /* SearchStreamTab.swift */,
 				63FD098FF3658292A2D3E3D1 /* SettingsTab.swift */,
 				4A868CD5A2937C95EC9FE5C2 /* StatsView.swift */,
 				FB82C28A1880D67144578398 /* WifiServerView.swift */,
@@ -338,6 +344,7 @@
 				4BB8A5D26B5C76A6BF756DA6 /* AnimationThemeService.swift in Sources */,
 				F9E0208D19E6DD1249BA6DA8 /* AudioPlayerService.swift in Sources */,
 				BB03A57349AB19179546DAB0 /* BackupService.swift in Sources */,
+				B41525AD90DB3DA827AD462A /* BitChordStreamService.swift in Sources */,
 				A8FFABFEFD608DD4454366BC /* DownloadQueueService.swift in Sources */,
 				DAFAAAF9A50E2636025BEB67 /* EqualizerService.swift in Sources */,
 				9788AFA42DD1A6CD68562D4E /* IntegrationsService.swift in Sources */,
@@ -371,6 +378,7 @@
 				55DE2C212A8915FEADA359BA /* PcCompanionView.swift in Sources */,
 				1EB6D1DA097008D365C60BDA /* PlaylistDetailView.swift in Sources */,
 				FDEF3702450B7FDBFED7EBB3 /* PlaylistTab.swift in Sources */,
+				E671C3451B936236DD971DF5 /* SearchStreamTab.swift in Sources */,
 				CB6DDD5FEBA9C60FC6023994 /* SettingsTab.swift in Sources */,
 				FCBC297C70F40A9A23085537 /* StatsView.swift in Sources */,
 				A4788A4188959833B7394423 /* WifiServerView.swift in Sources */,

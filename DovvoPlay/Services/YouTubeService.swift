@@ -283,7 +283,12 @@ public class YouTubeService: ObservableObject {
     public func getPlayableStreamUrl(videoId: String) async -> URL? {
         lastFailureReason = nil
 
-        // Query YouTube Innertube Player API with Android VR client
+        // 1. BitChord Stream Resolver (visionOS, Android VR, Web Remix)
+        if let resolved = await BitChordStreamService.shared.resolveStream(videoId: videoId) {
+            return resolved.url
+        }
+
+        // 2. Query YouTube Innertube Player API with Android VR client
         let playerURL = URL(string: "https://www.youtube.com/youtubei/v1/player")!
         var request = URLRequest(url: playerURL)
         request.httpMethod = "POST"

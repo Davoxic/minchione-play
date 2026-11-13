@@ -253,18 +253,18 @@ public class AudioPlayerService: NSObject, ObservableObject {
                     let videoId = track.id.replacingOccurrences(of: "yt_", with: "")
 
                     // 1. Check local audio file
-                    if let local = YouTubeService.shared.getLocalAudioFile(trackId: track.id) {
+                    if let local = BitChordStreamService.shared.getLocalAudioFile(videoId: videoId) ?? YouTubeService.shared.getLocalAudioFile(trackId: track.id) {
                         audioURL = local
                     }
-                    // 2. Download to cache
-                    else if let cached = await YouTubeService.shared.downloadToCache(videoId: videoId, title: track.title) {
-                        audioURL = cached
+                    // 2. Resolve stream via BitChord multi-profile extractor (VisionOS, Android VR, Web Remix)
+                    else if let resolved = await BitChordStreamService.shared.resolveStream(videoId: videoId) {
+                        audioURL = resolved.url
                     }
                     // 3. Fallback playable stream
                     else if let stream = await YouTubeService.shared.getPlayableStreamUrl(videoId: videoId) {
                         audioURL = stream
                     } else {
-                        throw NSError(domain: "DovvoPlay", code: 404, userInfo: [NSLocalizedDescriptionKey: "Flusso audio non disponibile."])
+                        throw NSError(domain: "MinchionePlay", code: 404, userInfo: [NSLocalizedDescriptionKey: "Flusso audio non disponibile."])
                     }
                 } else if let localPath = track.filePath {
                     audioURL = URL(fileURLWithPath: localPath)

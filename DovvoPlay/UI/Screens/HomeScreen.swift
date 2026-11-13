@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct HomeScreen: View {
-    @State private var selectedTab: Int = 1 // 0: Playlist, 1: Libreria (Default), 2: Impostazioni
+    @State private var selectedTab: Int = 1 // 0: Libreria, 1: Cerca (Default), 2: Playlist, 3: Impostazioni
     @State private var isPresentingNowPlaying: Bool = false
     @ObservedObject private var player = AudioPlayerService.shared
     @ObservedObject private var updateService = UpdateService.shared
@@ -17,22 +17,28 @@ public struct HomeScreen: View {
 
     public var body: some View {
         ZStack(alignment: .bottom) {
-            // Main Content Tabs
+            // Main Content Tabs (BitChord + DovvoPlay)
             TabView(selection: $selectedTab) {
-                PlaylistTab()
-                    .tag(0)
-                    .tabItem {
-                        Label("Playlist", systemImage: "music.note.list")
-                    }
-
                 LibraryTab()
-                    .tag(1)
+                    .tag(0)
                     .tabItem {
                         Label("Libreria", systemImage: "music.note.house.fill")
                     }
 
-                SettingsTab()
+                SearchStreamTab()
+                    .tag(1)
+                    .tabItem {
+                        Label("Cerca", systemImage: "magnifyingglass")
+                    }
+
+                PlaylistTab()
                     .tag(2)
+                    .tabItem {
+                        Label("Playlist", systemImage: "music.note.list")
+                    }
+
+                SettingsTab()
+                    .tag(3)
                     .tabItem {
                         Label("Impostazioni", systemImage: "gearshape.fill")
                     }
